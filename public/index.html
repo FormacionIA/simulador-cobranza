@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Cobranza</title>
+</head>
+<body>
+  <h1>🎙️ Simulador de Cobranza - Cliente Virtual</h1>
+  <button id="iniciar">Iniciar Simulación</button>
+  <button id="grabar">Grabar Respuesta</button>
+  <button id="finalizar">Finalizar y Evaluar</button>
+
+  <script>
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "es-ES";
+
+    document.getElementById("grabar").onclick = () => {
+      recognition.start();
+    };
+
+    recognition.onresult = async (event) => {
+      const texto = event.results[0][0].transcript;
+      console.log("Asesor dijo:", texto);
+
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "system", content: "Eres un cliente con deudas financieras y responderás con objeciones realistas." },
+            { role: "user", content: texto }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const reply = data.choices[0].message.content;
+      const utterance = new SpeechSynthesisUtterance(reply);
+      speechSynthesis.speak(utterance);
+    };
+  </script>
+</body>
+</html>
 
