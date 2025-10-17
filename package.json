@@ -1,1 +1,16 @@
+{
+  "name": "simulador-cobranza",
+  "version": "1.0.0",
+  "description": "Simulador de cobranza con voz y cliente virtual IA",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2"
+  }
+}
 
